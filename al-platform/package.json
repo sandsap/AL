@@ -9,6 +9,7 @@
   },
   "scripts": {
     "demo": "tsx src/demo.ts",
+    "demo:voice": "tsx src/voice/harness.ts",
     "dev:api": "tsx watch src/server/control-api.ts",
     "dev:media": "tsx watch src/server/media-gateway.ts",
     "typecheck": "tsc --noEmit",
