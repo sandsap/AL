@@ -14,6 +14,7 @@ import { makeSchedulingProvider } from "../booking/providerFactory.js";
 import { Orchestrator } from "../agent/orchestrator.js";
 import { MockLLMProvider } from "../llm/mock.js";
 import { AnthropicProvider } from "../llm/anthropic.js";
+import { RoutingLLMProvider } from "../llm/routing.js";
 import type { LLMProvider } from "../llm/provider.js";
 import type { ASRProvider } from "../voice/asr.js";
 import type { TTSProvider } from "../voice/tts.js";
@@ -37,7 +38,12 @@ const DEMO_TENANT: Tenant = {
 };
 
 function makeLLM(): LLMProvider {
-  return process.env.ANTHROPIC_API_KEY ? new AnthropicProvider() : new MockLLMProvider();
+  if (!process.env.ANTHROPIC_API_KEY) return new MockLLMProvider();
+  // Two-tier routing: fast model for simple turns, smart model for reasoning.
+  const smart = new AnthropicProvider(undefined, process.env.ANTHROPIC_MODEL);
+  const fastModel = process.env.ANTHROPIC_FAST_MODEL ?? "claude-haiku-4-5-20251001";
+  const fast = new AnthropicProvider(undefined, fastModel);
+  return new RoutingLLMProvider(fast, smart, (tier) => console.log(`[llm] tier=${tier}`));
 }
 function makeASR(): ASRProvider {
   return process.env.DEEPGRAM_API_KEY ? new DeepgramASRProvider() : new MockASRProvider();

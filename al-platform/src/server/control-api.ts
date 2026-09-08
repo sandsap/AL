@@ -12,6 +12,9 @@ import { Orchestrator } from "../agent/orchestrator.js";
 import { MockLLMProvider } from "../llm/mock.js";
 import { listCalls, getCall, metrics } from "../dashboard/store.js";
 import { dashboardHtml } from "../dashboard/page.js";
+import type Stripe from "stripe";
+import { Billing } from "../billing/stripe.js";
+import { applyStripeEvent, getProvisioning } from "../billing/provisioning.js";
 
 const DEMO_TENANT: Tenant = {
   id: "t_demo",
@@ -83,11 +86,36 @@ export function build() {
     done(null, body);
   });
   app.post("/webhooks/stripe", async (req, reply) => {
-    // In production: verify with Billing.constructEvent(req.body, sig) and
-    // dispatch provisioningActionFor(event). Left unwired so the server boots
-    // without Stripe keys.
-    req.log.info("stripe webhook received (verification not wired in demo)");
-    return reply.code(200).send({ received: true });
+    const raw = req.body as Buffer;
+    const sig = req.headers["stripe-signature"] as string | undefined;
+
+    let event: Stripe.Event;
+    if (process.env.STRIPE_SECRET_KEY && process.env.STRIPE_WEBHOOK_SECRET) {
+      // Production path: verify the signature before trusting the payload.
+      try {
+        event = new Billing().constructEvent(raw, sig ?? "");
+      } catch (err) {
+        req.log.warn({ err }, "stripe signature verification failed");
+        return reply.code(400).send({ error: "invalid signature" });
+      }
+    } else {
+      // Dev/testing path (no keys): accept the unverified JSON so the flow is
+      // testable locally. NEVER reached in production, where keys are set.
+      try {
+        event = JSON.parse(raw.toString()) as Stripe.Event;
+      } catch {
+        return reply.code(400).send({ error: "invalid json" });
+      }
+    }
+
+    const result = applyStripeEvent(event);
+    req.log.info({ type: event.type, action: result.action }, "stripe event applied");
+    return reply.code(200).send({ received: true, ...result });
+  });
+
+  app.get<{ Params: { id: string } }>("/api/tenants/:id/provisioning", async (req, reply) => {
+    if (!TENANTS[req.params.id]) return reply.code(404).send({ error: "tenant not found" });
+    return getProvisioning(req.params.id);
   });
 
   return app;

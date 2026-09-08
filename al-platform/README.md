@@ -45,11 +45,11 @@ clearly-marked example data; production swaps the in-memory store for the
 | Deterministic booking engine (rules, idempotency) | ✅ real, runnable |
 | Real-time voice loop (ASR→agent→TTS, barge-in) | ✅ real; keyless mocks + Deepgram/Cartesia |
 | Media Gateway (Twilio Media Streams) | ✅ real loop; add /health route + TLS for prod |
-| CRM adapters | ✅ mock + Housecall Pro (HTTP, VERIFY endpoints); ServiceTitan/Jobber TODO |
-| LLM providers (mock + Claude) | ✅ real |
+| CRM adapters | ✅ mock + Housecall Pro (HTTP) + Jobber (GraphQL), endpoints flagged VERIFY; ServiceTitan TODO |
+| LLM providers (mock + Claude) | ✅ real; two-tier fast/smart routing in the gateway |
 | Control API (health, tenant, simulate, webhook) | ✅ real (in-memory store) |
 | Owner dashboard (ROI tiles, calls, transcripts) | ✅ real, served by control API (example data); Next.js port TODO |
-| Stripe billing module | ✅ real code; needs your keys + wiring to tenant store |
+| Stripe billing + provisioning | ✅ real; webhook verifies signature and activates/suspends tenants |
 | AWS Terraform (VPC, ALB, ECS, Aurora, Redis, IAM) | ✅ authored, not yet `validate`d; HTTPS/autoscaling TODO |
 
 Run the voice loop end-to-end offline:
