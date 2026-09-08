@@ -36,12 +36,19 @@ curl -X POST localhost:8080/tenants/t_demo/simulate-call \
 |---|---|
 | Agent orchestrator (tool-use loop, guardrails) | ✅ real, runnable |
 | Deterministic booking engine (rules, idempotency) | ✅ real, runnable |
-| CRM adapter interface + mock adapter | ✅ real (mock); real adapters are TODO |
+| Real-time voice loop (ASR→agent→TTS, barge-in) | ✅ real; keyless mocks + Deepgram/Cartesia |
+| Media Gateway (Twilio Media Streams) | ✅ real loop; add /health route + TLS for prod |
+| CRM adapters | ✅ mock + Housecall Pro (HTTP, VERIFY endpoints); ServiceTitan/Jobber TODO |
 | LLM providers (mock + Claude) | ✅ real |
 | Control API (health, tenant, simulate, webhook) | ✅ real (in-memory store) |
 | Stripe billing module | ✅ real code; needs your keys + wiring to tenant store |
-| Media Gateway (Twilio Media Streams) | 🟡 protocol skeleton; ASR/TTS stubbed |
-| AWS Terraform | 🟡 skeleton; networking/services are TODO |
+| AWS Terraform (VPC, ALB, ECS, Aurora, Redis, IAM) | ✅ authored, not yet `validate`d; HTTPS/autoscaling TODO |
+
+Run the voice loop end-to-end offline:
+
+```bash
+npm run demo:voice   # simulates a Twilio media stream through the full CallSession
+```
 
 ## Layout
 

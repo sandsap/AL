@@ -1,9 +1,12 @@
-# Al platform — AWS infrastructure skeleton (Terraform).
+# Al platform — AWS infrastructure (Terraform).
 #
-# This is a STARTING POINT, not a turnkey apply. It declares the shape of the
-# production stack from ARCHITECTURE.md §5. Fill in networking (VPC/subnets),
-# task definitions, and IAM before `terraform apply`. Review every resource and
-# its cost before applying — this provisions billable AWS infrastructure.
+# Stack from ARCHITECTURE.md §5, split across files: network.tf (VPC), alb.tf,
+# ecs-services.tf (Fargate), data.tf (Aurora + Redis), iam.tf, outputs.tf.
+# This is intended to plan/apply, but REVIEW every resource and its cost first —
+# it provisions billable AWS infrastructure (NAT, ALB, Aurora, Redis, Fargate).
+# Not yet included (see README): HTTPS/ACM + 80->443 redirect, service
+# autoscaling, remote state backend, WAF. Validate engine versions/node types in
+# your region.
 
 terraform {
   required_version = ">= 1.6"
@@ -62,11 +65,17 @@ resource "aws_s3_bucket_lifecycle_configuration" "recordings" {
   }
 }
 
-# TODO (see ARCHITECTURE.md §5):
-#   - aws_vpc / subnets / NAT / security groups
-#   - aws_lb (ALB, WSS) for control-api and media-gateway
-#   - aws_ecs_task_definition + aws_ecs_service per service
-#   - aws_rds_cluster (Aurora Serverless v2 Postgres, pgvector)
-#   - aws_elasticache_cluster (Redis)
-#   - aws_iam_role task/exec roles (least privilege)
-#   - CloudWatch log groups + alarms (p95 conversational latency SLO)
+# Implemented across the other files in this directory:
+#   network.tf       VPC, public/private subnets, IGW, NAT, routes
+#   alb.tf           ALB + target groups + listener (WSS-capable)
+#   ecs-services.tf  Fargate task defs + services, log groups, service SG
+#   data.tf          Aurora Serverless v2 Postgres, ElastiCache Redis
+#   iam.tf           task execution + task roles (least privilege)
+#   outputs.tf       ALB DNS, ECR URLs, DB/Redis endpoints
+#
+# Still to add before hardening for production:
+#   - HTTPS listener (ACM cert) + 80->443 redirect
+#   - aws_appautoscaling_* for ECS services (scale on concurrent calls)
+#   - CloudWatch alarms for the p95 conversational-latency SLO
+#   - enable pgvector extension via DB migration
+#   - remote state backend (S3 + DynamoDB lock)
