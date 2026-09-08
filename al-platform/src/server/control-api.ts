@@ -10,6 +10,8 @@ import { BookingEngine } from "../booking/engine.js";
 import { MockCrmAdapter } from "../booking/mockCrm.js";
 import { Orchestrator } from "../agent/orchestrator.js";
 import { MockLLMProvider } from "../llm/mock.js";
+import { listCalls, getCall, metrics } from "../dashboard/store.js";
+import { dashboardHtml } from "../dashboard/page.js";
 
 const DEMO_TENANT: Tenant = {
   id: "t_demo",
@@ -30,6 +32,30 @@ export function build() {
   const app = Fastify({ logger: true });
 
   app.get("/health", async () => ({ ok: true, service: "control-api" }));
+
+  // --- Owner dashboard (served page + JSON it fetches) ---
+  app.get("/", async (_req, reply) => {
+    reply.type("text/html").send(dashboardHtml(DEMO_TENANT.id));
+  });
+
+  app.get<{ Params: { id: string } }>("/api/tenants/:id/metrics", async (req, reply) => {
+    if (!TENANTS[req.params.id]) return reply.code(404).send({ error: "tenant not found" });
+    return metrics(req.params.id);
+  });
+
+  app.get<{ Params: { id: string } }>("/api/tenants/:id/calls", async (req, reply) => {
+    if (!TENANTS[req.params.id]) return reply.code(404).send({ error: "tenant not found" });
+    return listCalls(req.params.id);
+  });
+
+  app.get<{ Params: { id: string; callId: string } }>(
+    "/api/tenants/:id/calls/:callId",
+    async (req, reply) => {
+      const call = getCall(req.params.id, req.params.callId);
+      if (!call) return reply.code(404).send({ error: "call not found" });
+      return call;
+    },
+  );
 
   app.get<{ Params: { id: string } }>("/tenants/:id", async (req, reply) => {
     const t = TENANTS[req.params.id];

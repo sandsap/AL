@@ -22,13 +22,20 @@ You'll see a simulated "no heat" HVAC call run end-to-end and print a booked job
 demo uses a **mock LLM** and **in-memory CRM**, so it needs no external services. Set
 `ANTHROPIC_API_KEY` to run the same loop against real Claude instead of the mock.
 
-Run the control API:
+Run the control API + owner dashboard:
 
 ```bash
-npm run dev:api      # http://localhost:8080/health
+npm run dev:api      # then open http://localhost:8080/  (owner dashboard)
+                     #      http://localhost:8080/health
 curl -X POST localhost:8080/tenants/t_demo/simulate-call \
   -H 'content-type: application/json' -d '{"text":"my furnace is out"}'
 ```
+
+The dashboard shows revenue captured, jobs booked, booking rate, after-hours and
+escalation counts, p95 latency, a recent-calls table, and per-call transcripts —
+the ROI view that fights churn. It's served by the control API and seeded with
+clearly-marked example data; production swaps the in-memory store for the
+`calls`/`bookings` Postgres tables and ports the page to Next.js.
 
 ## What's real vs. scaffolded
 
@@ -41,6 +48,7 @@ curl -X POST localhost:8080/tenants/t_demo/simulate-call \
 | CRM adapters | ✅ mock + Housecall Pro (HTTP, VERIFY endpoints); ServiceTitan/Jobber TODO |
 | LLM providers (mock + Claude) | ✅ real |
 | Control API (health, tenant, simulate, webhook) | ✅ real (in-memory store) |
+| Owner dashboard (ROI tiles, calls, transcripts) | ✅ real, served by control API (example data); Next.js port TODO |
 | Stripe billing module | ✅ real code; needs your keys + wiring to tenant store |
 | AWS Terraform (VPC, ALB, ECS, Aurora, Redis, IAM) | ✅ authored, not yet `validate`d; HTTPS/autoscaling TODO |
 
@@ -59,6 +67,7 @@ src/
   booking/    scheduling adapter interface, mock CRM, booking engine
   agent/      orchestrator (the conversation + tool loop)
   billing/    Stripe subscriptions + metered usage + webhooks
+  dashboard/  owner dashboard: call store + metrics + served page
   server/     control-api (Fastify) and media-gateway (Twilio WS)
   demo.ts     end-to-end offline simulation
 infra/terraform/   AWS deployment skeleton
