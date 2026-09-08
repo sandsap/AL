@@ -9,7 +9,7 @@
 import { WebSocketServer, type WebSocket } from "ws";
 import type { CallContext, Tenant } from "../core/types.js";
 import { BookingEngine } from "../booking/engine.js";
-import { MockCrmAdapter } from "../booking/mockCrm.js";
+import { makeSchedulingProvider } from "../booking/providerFactory.js";
 import { Orchestrator } from "../agent/orchestrator.js";
 import { MockLLMProvider } from "../llm/mock.js";
 import { AnthropicProvider } from "../llm/anthropic.js";
@@ -72,7 +72,7 @@ export function startMediaGateway(port = Number(process.env.MEDIA_PORT ?? 8081))
             tenant: DEMO_TENANT,
             fromNumber: "unknown",
           };
-          const scheduling = new MockCrmAdapter();
+          const scheduling = makeSchedulingProvider(ctx.tenant);
           const orchestrator = new Orchestrator(ctx, {
             llm: makeLLM(),
             scheduling,
