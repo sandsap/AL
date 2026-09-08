@@ -1,0 +1,445 @@
+<title>Al Business Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap">
+<style>
+  :root{
+    --bg:#F5F6F8; --surface:#FFFFFF; --surface-2:#FbFcFd;
+    --ink:#14202E; --text:#26333F; --muted:#5B6875;
+    --border:#DEE3E8; --border-strong:#C9D0D8;
+    --accent:#D9770B; --accent-ink:#B8620A; --accent-soft:#FBEBD6;
+    --steel:#2E5A7A;
+    --pos:#177046; --pos-soft:#E4F1EA;
+    --shadow:0 1px 2px rgba(20,32,46,.06), 0 8px 24px -12px rgba(20,32,46,.14);
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme:dark){
+      --bg:#0E1620; --surface:#16212D; --surface-2:#1A2734;
+      --ink:#EDF1F5; --text:#CDd6DF; --muted:#8B98A7;
+      --border:#26333F; --border-strong:#33424F;
+      --accent:#F0942A; --accent-ink:#F3A54B; --accent-soft:#372718;
+      --steel:#7FB0D6;
+      --pos:#46BE86; --pos-soft:#152C20;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1620; --surface:#16212D; --surface-2:#1A2734;
+    --ink:#EDF1F5; --text:#CDd6DF; --muted:#8B98A7;
+    --border:#26333F; --border-strong:#33424F;
+    --accent:#F0942A; --accent-ink:#F3A54B; --accent-soft:#372718;
+    --steel:#7FB0D6;
+    --pos:#46BE86; --pos-soft:#152C20;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+    font-size:18px; line-height:1.62; margin:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px; margin:0 auto; padding:0 28px 96px}
+  .prose{max-width:68ch}
+
+  /* ---- type roles ---- */
+  h1,h2,h3,.wordmark,.eyebrow,.metric,.tag{font-family:"Archivo",system-ui,sans-serif}
+  .eyebrow,.label,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  .eyebrow{
+    font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--accent-ink); font-weight:600; margin:0 0 14px;
+  }
+  h2{
+    font-size:26px; line-height:1.15; font-weight:700; color:var(--ink);
+    text-wrap:balance; margin:0 0 6px; letter-spacing:-.01em;
+  }
+  h3{font-size:18px; font-weight:700; color:var(--ink); margin:26px 0 4px}
+  p{margin:0 0 16px}
+  a{color:var(--steel); text-decoration-thickness:1px; text-underline-offset:2px}
+  strong{color:var(--ink); font-weight:600}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+
+  /* ---- masthead ---- */
+  header{padding:64px 0 40px}
+  .wordmark{
+    display:inline-flex; align-items:baseline; gap:12px;
+    font-size:40px; font-weight:800; color:var(--ink); letter-spacing:-.02em;
+  }
+  .wordmark .dot{
+    width:11px; height:11px; border-radius:50%; background:var(--accent);
+    display:inline-block; transform:translateY(-2px);
+    box-shadow:0 0 0 4px var(--accent-soft);
+  }
+  .wordmark small{
+    font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:500;
+    letter-spacing:.04em; color:var(--muted);
+  }
+  .thesis{
+    font-family:"Archivo",sans-serif; font-weight:800;
+    font-size:clamp(34px,6vw,58px); line-height:1.02; letter-spacing:-.025em;
+    color:var(--ink); margin:28px 0 20px; text-wrap:balance; max-width:16ch;
+  }
+  .thesis .amp{color:var(--accent)}
+  .lede{font-size:20px; color:var(--text); max-width:60ch; margin:0 0 28px}
+  .meta{
+    display:flex; flex-wrap:wrap; gap:0; border:1px solid var(--border);
+    border-radius:12px; overflow:hidden; background:var(--surface); box-shadow:var(--shadow);
+  }
+  .meta div{
+    flex:1 1 auto; min-width:130px; padding:14px 18px;
+    border-right:1px solid var(--border);
+  }
+  .meta div:last-child{border-right:0}
+  .meta .label{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:4px}
+  .meta .val{font-family:"Archivo",sans-serif; font-weight:700; color:var(--ink); font-size:17px}
+
+  /* ---- stat band ---- */
+  .band{
+    background:var(--ink); border-radius:16px; padding:30px 28px;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:26px; margin:14px 0 8px;
+  }
+  .band .stat .metric{
+    font-family:"Archivo",sans-serif; font-weight:800; color:#fff;
+    font-size:clamp(26px,4vw,38px); line-height:1; letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;
+  }
+  .band .stat .metric .u{color:var(--accent); font-size:.62em}
+  .band .stat .cap{
+    font-family:"IBM Plex Mono",monospace; font-size:12px; line-height:1.4;
+    color:#AEB9C4; margin-top:10px; letter-spacing:.01em;
+  }
+
+  /* ---- sections ---- */
+  section{padding:44px 0; border-top:1px solid var(--border)}
+  .sec-head{display:flex; align-items:baseline; gap:16px; margin-bottom:18px}
+  .sec-no{
+    font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600;
+    color:var(--accent); padding-top:4px; min-width:2ch;
+    font-variant-numeric:tabular-nums;
+  }
+  .sec-head h2{margin:0}
+
+  /* ---- callout / pull ---- */
+  .pull{
+    border-left:3px solid var(--accent); background:var(--accent-soft);
+    padding:16px 20px; border-radius:0 10px 10px 0; margin:22px 0;
+    color:var(--ink); font-size:18px;
+  }
+  .ledger{color:var(--pos); font-weight:600}
+
+  /* ---- feature list ---- */
+  ol.steps{list-style:none; counter-reset:s; padding:0; margin:20px 0}
+  ol.steps li{
+    counter-increment:s; position:relative; padding:0 0 16px 46px; margin:0;
+  }
+  ol.steps li::before{
+    content:counter(s,decimal-leading-zero); position:absolute; left:0; top:1px;
+    font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600;
+    color:var(--accent); background:var(--accent-soft);
+    width:32px; height:32px; border-radius:8px; display:grid; place-items:center;
+  }
+  ol.steps li b{color:var(--ink); font-weight:600}
+
+  /* ---- tables ---- */
+  .tbl{overflow-x:auto; margin:20px 0; border:1px solid var(--border); border-radius:12px; background:var(--surface); box-shadow:var(--shadow)}
+  table{border-collapse:collapse; width:100%; font-size:15px}
+  th,td{padding:12px 16px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top}
+  thead th{
+    font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--muted); font-weight:600; background:var(--surface-2);
+  }
+  tbody tr:last-child td{border-bottom:0}
+  td.num,th.num{text-align:right; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink)}
+  tr.total td{background:var(--surface-2); font-weight:600}
+  tr.total td{border-top:2px solid var(--border-strong)}
+  td b{color:var(--ink)}
+
+  /* ---- two-col ---- */
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0}
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:18px 20px; box-shadow:var(--shadow);
+  }
+  .card h3{margin:0 0 6px; font-size:16px}
+  .card p{margin:0; font-size:15px; color:var(--muted); line-height:1.5}
+
+  /* ---- chart ---- */
+  .chartwrap{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px 20px 12px; box-shadow:var(--shadow); margin:20px 0}
+  .chartwrap svg{display:block; width:100%; height:auto}
+  .chart-cap{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted); margin:4px 2px 0}
+
+  /* ---- footer ---- */
+  footer{border-top:1px solid var(--border); padding:34px 0 0; color:var(--muted); font-size:14px}
+  .disclaim{font-size:13px; color:var(--muted); font-style:italic}
+
+  @media(max-width:680px){
+    .band{grid-template-columns:repeat(2,1fr); gap:22px}
+    .cols{grid-template-columns:1fr}
+    body{font-size:17px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="wordmark">Al<span class="dot"></span><small>AI&nbsp;FRONT&nbsp;OFFICE</small></div>
+    <p class="thesis">Al answers every call <span class="amp">&amp;</span> books the job.</p>
+    <p class="lede">The AI front-office employee for home-services businesses — HVAC, plumbing, and electrical. It picks up 24/7, qualifies the caller, and books the job straight into the schedule.</p>
+    <div class="meta">
+      <div><span class="label">Category</span><span class="val">AI vertical agent · SMB</span></div>
+      <div><span class="label">Stage</span><span class="val">Pre-seed / Seed</span></div>
+      <div><span class="label">Raising</span><span class="val">$4.0M</span></div>
+      <div><span class="label">Prepared</span><span class="val">2026</span></div>
+    </div>
+  </header>
+
+  <div class="band">
+    <div class="stat"><div class="metric">25–35<span class="u">%</span></div><div class="cap">of inbound calls missed at sub-20-employee shops</div></div>
+    <div class="stat"><div class="metric"><span class="u">$</span>400–3k</div><div class="cap">value of a single home-services job</div></div>
+    <div class="stat"><div class="metric"><span class="u">$</span>7.2<span class="u">B</span></div><div class="cap">US TAM, initial trades only</div></div>
+    <div class="stat"><div class="metric"><span class="u">$</span>4.0<span class="u">M</span></div><div class="cap">seed round to reach Series-A metrics</div></div>
+  </div>
+
+  <section id="summary">
+    <div class="sec-head"><span class="sec-no">01</span><h2>Executive summary</h2></div>
+    <div class="prose">
+      <p>Home-services contractors run on the phone. When it rings, it is almost always a customer with an urgent, high-value job: a dead furnace, a flooded basement, no power. Yet the typical small contractor <strong>misses 25–35% of inbound calls</strong> — the owner is on a roof, the one office person is on another line, or it's after 5pm. Every missed call is a booked job that goes to a competitor.</p>
+      <p><strong>Al</strong> is an AI agent that answers <em>every</em> call, 24/7, in a natural voice. It qualifies the caller, books the job directly into the contractor's scheduling software, handles reschedules and FAQs, and follows up on quotes. Unlike a horizontal "AI receptionist," Al is built for the trades: it speaks the vocabulary, integrates deeply with ServiceTitan, Housecall Pro, and Jobber, and is measured on the one number owners care about — <strong>jobs booked.</strong></p>
+      <div class="pull">At ~$500/month, Al pays for itself if it captures <span class="ledger">a single extra job a month.</span> Everything above that is margin the owner keeps.</div>
+      <p>We reach owners through the channels they already trust — trade-software marketplaces, franchise groups, and peer referral — and compound a defensible data moat from millions of real service calls that let us fine-tune vertical voice models no horizontal competitor can match.</p>
+    </div>
+  </section>
+
+  <section id="problem">
+    <div class="sec-head"><span class="sec-no">02</span><h2>The problem</h2></div>
+    <div class="prose">
+      <p>Home services is a $600B+ US market of millions of small businesses, most with fewer than 20 employees. These owners are technicians first, operators second — and their front office is chronically understaffed while the phone is their lifeblood.</p>
+    </div>
+    <div class="cols">
+      <div class="card"><h3>Phone is still the channel</h3><p>60%+ of jobs start with an inbound call. A customer with an emergency calls — they don't fill out a web form.</p></div>
+      <div class="card"><h3>Missed calls = lost revenue</h3><p>25–35% of calls go unanswered at small shops, spiking during storms and heat waves — exactly when demand and job value peak.</p></div>
+      <div class="card"><h3>Labor is scarce &amp; costly</h3><p>A capable CSR runs $40–55k+ fully loaded, is hard to hire, quits often, and doesn't work nights or weekends.</p></div>
+      <div class="card"><h3>After-hours is a black hole</h3><p>30–40% of calls arrive outside 9–5. Voicemail loses most of them for good.</p></div>
+    </div>
+    <div class="prose"><p>The owner <em>knows</em> they're leaking money on the phone but has no scalable way to fix it. That is the wedge.</p></div>
+  </section>
+
+  <section id="solution">
+    <div class="sec-head"><span class="sec-no">03</span><h2>The solution</h2></div>
+    <div class="prose"><p><strong>Al answers every call and turns it into a booked job.</strong> It goes live the same day, configured from the contractor's existing data in under an hour.</p></div>
+    <ol class="steps">
+      <li><b>24/7 natural-voice answering.</b> Sub-second latency, interruptible, trade-fluent. Picks up on the first ring — including overflow when staff are busy.</li>
+      <li><b>Booking, not just messaging.</b> Reads live availability, books the right job type into the right slot and technician, and writes directly to ServiceTitan / Housecall Pro / Jobber.</li>
+      <li><b>Qualification &amp; triage.</b> Separates emergency from routine, captures address, equipment, and problem, and routes true emergencies to on-call staff.</li>
+      <li><b>Reschedules, reminders &amp; quote follow-up.</b> Cuts no-shows and revives stale estimates — outbound revenue Al generates on its own.</li>
+      <li><b>Owner dashboard.</b> Every call transcribed, summarized, and scored, with a running tally of jobs booked and revenue captured — the ROI, in dollars, front and center.</li>
+    </ol>
+  </section>
+
+  <section id="why-now">
+    <div class="sec-head"><span class="sec-no">04</span><h2>Why now</h2></div>
+    <div class="cols">
+      <div class="card"><h3>Voice AI crossed the line</h3><p>By 2024–25, speech-to-speech latency and naturalness reached the point where callers no longer reliably know they're talking to software — the prerequisite for booking real jobs.</p></div>
+      <div class="card"><h3>Inference costs are falling</h3><p>A per-minute voice agent shifts from margin-negative to healthy-margin over our planning horizon.</p></div>
+      <div class="card"><h3>Deep SMB software base</h3><p>Field-service platforms now have the APIs and marketplaces that make same-day write-back integrations — and low-CAC distribution — possible.</p></div>
+      <div class="card"><h3>Worsening labor shortage</h3><p>"An employee that never quits" is an easy yes for owners who already can't hire.</p></div>
+    </div>
+    <div class="prose"><p>The window is now: the technology just became good enough, and the horizontal players haven't yet gone deep on any single vertical.</p></div>
+  </section>
+
+  <section id="market">
+    <div class="sec-head"><span class="sec-no">05</span><h2>Market size</h2></div>
+    <div class="prose"><p>Bottom-up, US-only, initial trades (HVAC, plumbing, electrical). ACV blends a ~$500/mo subscription with usage.</p></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Segment</th><th>Definition</th><th class="num">Businesses</th><th class="num">ACV</th><th class="num">Value</th></tr></thead>
+      <tbody>
+        <tr><td><b>TAM</b></td><td>All US home-services SMBs, phone-driven</td><td class="num">~1,000,000</td><td class="num">$7,200</td><td class="num"><b>~$7.2B</b></td></tr>
+        <tr><td><b>SAM</b></td><td>HVAC / plumbing / electrical, 2–50 techs, US</td><td class="num">~300,000</td><td class="num">$7,200</td><td class="num"><b>~$2.2B</b></td></tr>
+        <tr><td><b>SOM · Yr 3</b></td><td>~1% of SAM</td><td class="num">~3,000</td><td class="num">$7,200</td><td class="num"><b>~$21M</b></td></tr>
+      </tbody>
+    </table></div>
+    <div class="prose"><p>Expanding beyond the first three trades (roofing, garage doors, pest, landscaping, water treatment, appliance repair) and into Canada / UK / AU roughly <strong>triples the TAM</strong> without changing the product core.</p></div>
+  </section>
+
+  <section id="product">
+    <div class="sec-head"><span class="sec-no">06</span><h2>Product &amp; technology</h2></div>
+    <div class="prose">
+      <p><strong>Architecture.</strong> A real-time voice pipeline — telephony → streaming ASR → an orchestration layer over frontier and fine-tuned LLMs → streaming TTS — wrapped in a deterministic <strong>booking engine</strong> that enforces business rules and writes to the CRM. Voice is the interface; the booking engine and integrations are the product.</p>
+      <h3>The moat is data + integrations + workflow depth</h3>
+    </div>
+    <div class="cols">
+      <div class="card"><h3>Vertical data flywheel</h3><p>Every call, labeled with its outcome, trains models measurably better at <em>this</em> conversation. More customers → more calls → higher booking rate → lower churn. Horizontal rivals lack trade-specific data.</p></div>
+      <div class="card"><h3>Deep certified integrations</h3><p>Same-day write-back to ServiceTitan, Housecall Pro, and Jobber is hard, high-trust engineering. Marketplace listings double as distribution.</p></div>
+      <div class="card"><h3>Workflow depth</h3><p>Emergency triage, dispatch rules, multi-location, and financing scripts compound into switching costs.</p></div>
+      <div class="card"><h3>Outcome accountability</h3><p>We instrument booked jobs and dollars captured, so the product proves its own ROI and anchors pricing.</p></div>
+    </div>
+  </section>
+
+  <section id="model">
+    <div class="sec-head"><span class="sec-no">07</span><h2>Business model &amp; unit economics</h2></div>
+    <div class="prose"><h3 style="margin-top:0">Pricing — land &amp; expand</h3></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Tier</th><th class="num">Price</th><th>What it covers</th></tr></thead>
+      <tbody>
+        <tr><td><b>Starter</b></td><td class="num">$399/mo</td><td>Overflow + after-hours answering and booking, 1 location</td></tr>
+        <tr><td><b>Pro</b></td><td class="num">$699/mo</td><td>24/7 primary line, outbound follow-up, multi-tech dispatch</td></tr>
+        <tr><td><b>Multi-location</b></td><td class="num">Custom</td><td>Franchise / roll-up, per-location + usage overage</td></tr>
+      </tbody>
+    </table></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Unit economics (at scale)</th><th class="num">Target</th></tr></thead>
+      <tbody>
+        <tr><td>Blended ACV</td><td class="num">~$7,200</td></tr>
+        <tr><td>Gross margin</td><td class="num">~50% → 70%+</td></tr>
+        <tr><td>CAC (blended inbound + partner)</td><td class="num">$1,500–3,000</td></tr>
+        <tr><td>CAC payback</td><td class="num">&lt; 12 months</td></tr>
+        <tr><td>Gross logo churn</td><td class="num">3%/mo → &lt; 1.5%</td></tr>
+        <tr class="total"><td>LTV : CAC</td><td class="num">&gt; 3 : 1</td></tr>
+      </tbody>
+    </table></div>
+    <div class="prose"><p>The ROI story keeps churn low: an owner watching "jobs booked" tick up does not cancel the thing booking jobs.</p></div>
+  </section>
+
+  <section id="gtm">
+    <div class="sec-head"><span class="sec-no">08</span><h2>Go-to-market</h2></div>
+    <div class="prose"><p><strong>ICP:</strong> owner-operated HVAC / plumbing / electrical firms, 3–30 technicians, already on a supported field-service platform, feeling the pain of missed calls.</p></div>
+    <ol class="steps">
+      <li><b>Software marketplaces &amp; integration partnerships.</b> Co-listing and co-marketing with ServiceTitan, Housecall Pro, and Jobber for warm, low-CAC distribution.</li>
+      <li><b>Franchise &amp; buying groups / PE roll-ups.</b> Land one location, expand to the network. PE-owned platforms are actively hunting exactly this ROI.</li>
+      <li><b>Peer channels.</b> Trade Facebook groups, coaching networks, podcasts, and referral incentives. The trades run on word of mouth.</li>
+      <li><b>Founder-led outbound</b> to prove the motion before scaling a small inside-sales team.</li>
+    </ol>
+    <div class="prose"><p><strong>Land → expand:</strong> start on overflow / after-hours (low risk), earn trust with booked jobs, upgrade to the 24/7 primary line and outbound follow-up, then multi-location.</p></div>
+  </section>
+
+  <section id="competition">
+    <div class="sec-head"><span class="sec-no">09</span><h2>Competition</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Category</th><th>Examples</th><th>Why we win</th></tr></thead>
+      <tbody>
+        <tr><td><b>Human answering services</b></td><td>Traditional call centers</td><td>Cheaper, 24/7, actually <em>books</em> into the CRM, never has a bad day</td></tr>
+        <tr><td><b>Horizontal AI receptionists</b></td><td>General voice-AI agents</td><td>We go deep: trade-fluent, certified CRM write-back, outcome-based</td></tr>
+        <tr><td><b>CRM-native add-ons</b></td><td>Platforms' own features</td><td>Best-of-breed and cross-platform; platforms are slow and generic on voice</td></tr>
+        <tr><td><b>DIY / status quo</b></td><td>Voicemail, the owner's cell</td><td>We recover the 25–35% of calls the status quo loses</td></tr>
+      </tbody>
+    </table></div>
+    <div class="prose"><p><strong>Defensibility</strong> compounds through the vertical data flywheel, integration switching costs, and being the system of record for "jobs booked."</p></div>
+  </section>
+
+  <section id="traction">
+    <div class="sec-head"><span class="sec-no">10</span><h2>Traction &amp; milestones</h2></div>
+    <div class="pull" style="border-left-color:var(--steel); background:var(--surface-2); color:var(--muted); font-family:'IBM Plex Mono',monospace; font-size:14px">Populate with live metrics before sending to investors.</div>
+    <div class="prose">
+      <p><strong>Now:</strong> [X] design partners live · [Y] calls handled · booking rate [Z]% · $[ ] revenue captured for customers · early logo retention.</p>
+      <p><strong>Seed goal (18–24 mo):</strong> ~$3–5M ARR, efficient growth — net revenue retention &gt; 100%, CAC payback &lt; 12 mo, gross churn trending &lt; 2%/mo — and 2+ certified integrations live.</p>
+    </div>
+  </section>
+
+  <section id="team">
+    <div class="sec-head"><span class="sec-no">11</span><h2>Team</h2></div>
+    <div class="cols">
+      <div class="card"><h3>[Founder / CEO]</h3><p>Domain + GTM background — ideally home-services or SMB software.</p></div>
+      <div class="card"><h3>[Founder / CTO]</h3><p>Real-time voice / ML systems background.</p></div>
+      <div class="card"><h3>Early hires (seed)</h3><p>Founding voice/ML engineer, integrations engineer, founding AE, customer-success lead.</p></div>
+      <div class="card"><h3>Advisors</h3><p>A multi-location operator, a field-service-platform exec, a voice-AI researcher.</p></div>
+    </div>
+    <div class="prose"><p class="disclaim">Why us: [unfair advantage — prior exits, deep trade relationships, or proprietary voice tech].</p></div>
+  </section>
+
+  <section id="financials">
+    <div class="sec-head"><span class="sec-no">12</span><h2>Financial projections</h2></div>
+    <div class="prose"><p>Illustrative, ending-ARR basis. Assumes a seed close in H1 and disciplined, ROI-led growth.</p></div>
+
+    <div class="chartwrap">
+      <svg viewBox="0 0 640 300" role="img" aria-label="Ending ARR: Year 1 ~$1.0M, Year 2 ~$5.0M, Year 3 ~$16M">
+        <g font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">
+          <line x1="90" y1="250" x2="600" y2="250" stroke="var(--border-strong)" stroke-width="1"/>
+          <line x1="90" y1="200" x2="600" y2="200" stroke="var(--border)" stroke-width="1"/>
+          <line x1="90" y1="150" x2="600" y2="150" stroke="var(--border)" stroke-width="1"/>
+          <line x1="90" y1="100" x2="600" y2="100" stroke="var(--border)" stroke-width="1"/>
+          <line x1="90" y1="50"  x2="600" y2="50"  stroke="var(--border)" stroke-width="1"/>
+          <text x="80" y="254" text-anchor="end">$0</text>
+          <text x="80" y="204" text-anchor="end">$4M</text>
+          <text x="80" y="154" text-anchor="end">$8M</text>
+          <text x="80" y="104" text-anchor="end">$12M</text>
+          <text x="80" y="54"  text-anchor="end">$16M</text>
+        </g>
+        <g>
+          <rect x="140" y="237.5" width="90" height="12.5" rx="4" fill="var(--steel)"/>
+          <rect x="300" y="187.5" width="90" height="62.5" rx="4" fill="var(--accent-ink)"/>
+          <rect x="460" y="50"    width="90" height="200"  rx="4" fill="var(--accent)"/>
+        </g>
+        <g font-family="Archivo, sans-serif" font-weight="700" font-size="16" fill="var(--ink)" text-anchor="middle">
+          <text x="185" y="228">$1.0M</text>
+          <text x="345" y="178">$5.0M</text>
+          <text x="505" y="40">$16M</text>
+        </g>
+        <g font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)" text-anchor="middle">
+          <text x="185" y="270">Year 1</text>
+          <text x="345" y="270">Year 2</text>
+          <text x="505" y="270">Year 3</text>
+        </g>
+      </svg>
+      <p class="chart-cap">Ending ARR by year — illustrative.</p>
+    </div>
+
+    <div class="tbl"><table>
+      <thead><tr><th>Metric</th><th class="num">Year 1</th><th class="num">Year 2</th><th class="num">Year 3</th></tr></thead>
+      <tbody>
+        <tr><td>Customers (end of year)</td><td class="num">150</td><td class="num">700</td><td class="num">2,200</td></tr>
+        <tr><td>Ending ARR</td><td class="num">~$1.0M</td><td class="num">~$5.0M</td><td class="num">~$16M</td></tr>
+        <tr><td>Gross margin</td><td class="num">~50%</td><td class="num">~60%</td><td class="num">~70%</td></tr>
+        <tr><td>Headcount</td><td class="num">~12</td><td class="num">~30</td><td class="num">~65</td></tr>
+        <tr class="total"><td>Net burn (annual)</td><td class="num">~$2.2M</td><td class="num">~$3.0M</td><td class="num">breakeven trend</td></tr>
+      </tbody>
+    </table></div>
+    <div class="prose"><p>Series-A raise targeted in Year 2 on the strength of ~$3–5M ARR and efficient-growth metrics.</p></div>
+  </section>
+
+  <section id="ask">
+    <div class="sec-head"><span class="sec-no">13</span><h2>The ask &amp; use of funds</h2></div>
+    <div class="prose"><p>Raising <strong>$4.0M seed</strong> for an 18–24 month runway to Series-A metrics.</p></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Use</th><th class="num">Allocation</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><b>Engineering &amp; product</b></td><td class="num">~50%</td><td>Voice pipeline, booking engine, integrations, data flywheel</td></tr>
+        <tr><td><b>Go-to-market</b></td><td class="num">~30%</td><td>Partnerships, founding sales &amp; CS, marketplace presence</td></tr>
+        <tr><td><b>AI / infrastructure</b></td><td class="num">~12%</td><td>Inference, telephony, model fine-tuning</td></tr>
+        <tr><td><b>G&amp;A / buffer</b></td><td class="num">~8%</td><td>Ops, legal, compliance</td></tr>
+      </tbody>
+    </table></div>
+    <div class="prose"><p><strong>Milestones this funds:</strong> 2+ certified integrations, $3–5M ARR, a repeatable GTM motion, LTV:CAC &gt; 3:1, and a fine-tuned vertical voice model outperforming horizontal baselines on booking rate.</p></div>
+  </section>
+
+  <section id="risks">
+    <div class="sec-head"><span class="sec-no">14</span><h2>Risks &amp; mitigations</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td>Bad call erodes customer trust</td><td>Vertical fine-tuning, seamless human handoff, booking-rate monitoring, start on low-risk overflow</td></tr>
+        <tr><td>Platforms build it themselves</td><td>Move faster, go cross-platform, own the data flywheel and ROI relationship; become an attractive acquisition</td></tr>
+        <tr><td>Inference cost / margin pressure</td><td>Costs falling; usage-based pricing passes through; route to right-sized models</td></tr>
+        <tr><td>SMB churn / budget sensitivity</td><td>Anchor on dollars-booked ROI; deepen integration switching costs; land on overflow first</td></tr>
+        <tr><td>Regulatory (recording, TCPA, AI disclosure)</td><td>Clear AI disclosure, per-state consent handling, compliance built into onboarding</td></tr>
+        <tr><td>Long, noisy sales cycles</td><td>Ride trusted channels rather than cold SMB acquisition</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="roadmap">
+    <div class="sec-head"><span class="sec-no">15</span><h2>Roadmap · 12–18 months</h2></div>
+    <ol class="steps">
+      <li><b>Q1–Q2.</b> Harden voice + booking engine; first certified integration; 10–20 design partners to a repeatable onboarding.</li>
+      <li><b>Q2–Q3.</b> Second integration; launch outbound follow-up; stand up partner / marketplace channel; reach ~$1M ARR.</li>
+      <li><b>Q3–Q4.</b> Multi-location / franchise tier; ship v1 fine-tuned vertical model; scale inside sales.</li>
+      <li><b>Next 6 mo.</b> Third integration and second trade cohort; ~$3–5M ARR; raise Series A.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <p class="disclaim">This is a planning document with illustrative, clearly-labeled figures. Validate all market and financial assumptions with primary data before circulating to investors.</p>
+  </footer>
+
+</div>
