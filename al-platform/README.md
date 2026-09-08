@@ -86,6 +86,13 @@ In `src/server/media-gateway.ts`, the `start`/`media`/`stop` handlers mark where
 Add real CRM adapters under `src/booking/` implementing `SchedulingProvider`
 (`HousecallProAdapter`, `ServiceTitanAdapter`, `JobberAdapter`).
 
+## Make a real phone call
+
+To hear Al on an actual phone number in ~30 minutes (Twilio + ngrok, no AWS),
+follow **[`FIRST_LIVE_CALL.md`](./FIRST_LIVE_CALL.md)**. The gateway serves the
+Twilio voice webhook (`/twiml/voice`) and the Media Stream (`/media`) on one
+port, so a single tunnel is enough.
+
 ## Launch runbook (what only you can do)
 
 Launching is **plug in your accounts + `terraform apply`** — but every item here requires

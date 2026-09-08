@@ -62,6 +62,19 @@ export function startMediaGateway(port = Number(process.env.MEDIA_PORT ?? 8081))
       res.end(JSON.stringify({ ok: true, service: "media-gateway" }));
       return;
     }
+    // Twilio voice webhook: return TwiML that opens a Media Stream back to this
+    // same host (so one ngrok tunnel serves both the webhook and the wss stream).
+    // Twilio POSTs here; GET is allowed for easy manual testing.
+    if (req.url === "/twiml/voice") {
+      const host = process.env.PUBLIC_HOST ?? req.headers.host ?? `localhost:${port}`;
+      const streamUrl = `wss://${host}/media`;
+      const twiml =
+        `<?xml version="1.0" encoding="UTF-8"?>\n` +
+        `<Response>\n  <Connect>\n    <Stream url="${streamUrl}"/>\n  </Connect>\n</Response>\n`;
+      res.writeHead(200, { "content-type": "text/xml" });
+      res.end(twiml);
+      return;
+    }
     res.writeHead(426, { "content-type": "text/plain" });
     res.end("Upgrade Required");
   });
