@@ -55,29 +55,77 @@ resource "aws_lb_target_group" "media_gateway" {
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
   target_type = "ip"
-  # The gateway is WebSocket-only; a plain GET returns a non-200 upgrade code,
-  # so accept the WS handshake range. TODO: add a lightweight /health route to
-  # the gateway and tighten this to "200".
+  # Gateway serves GET /health (200) alongside the WebSocket upgrade endpoint.
   health_check {
-    path    = "/"
-    matcher = "200-499"
+    path    = "/health"
+    matcher = "200"
   }
 }
 
-# HTTP listener. In production, add an HTTPS (443) listener with an ACM cert and
-# redirect 80 -> 443; kept as HTTP here so `apply` needs no pre-provisioned cert.
+locals {
+  tls_enabled = var.certificate_arn != ""
+}
+
+# Port 80: forwards to the API when no cert is set (local/testing); redirects to
+# 443 once a cert ARN is provided (Twilio Media Streams requires wss://).
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
   port              = 80
   protocol          = "HTTP"
+
+  dynamic "default_action" {
+    for_each = local.tls_enabled ? [] : [1]
+    content {
+      type             = "forward"
+      target_group_arn = aws_lb_target_group.control_api.arn
+    }
+  }
+  dynamic "default_action" {
+    for_each = local.tls_enabled ? [1] : []
+    content {
+      type = "redirect"
+      redirect {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
+  }
+}
+
+# Route /media(/*) to the gateway on whichever listener serves live traffic.
+resource "aws_lb_listener_rule" "media_http" {
+  count        = local.tls_enabled ? 0 : 1
+  listener_arn = aws_lb_listener.http.arn
+  priority     = 10
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.media_gateway.arn
+  }
+  condition {
+    path_pattern {
+      values = ["/media", "/media/*"]
+    }
+  }
+}
+
+# HTTPS listener — created only when a cert ARN is supplied.
+resource "aws_lb_listener" "https" {
+  count             = local.tls_enabled ? 1 : 0
+  load_balancer_arn = aws_lb.main.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn   = var.certificate_arn
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.control_api.arn
   }
 }
 
-resource "aws_lb_listener_rule" "media" {
-  listener_arn = aws_lb_listener.http.arn
+resource "aws_lb_listener_rule" "media_https" {
+  count        = local.tls_enabled ? 1 : 0
+  listener_arn = aws_lb_listener.https[0].arn
   priority     = 10
   action {
     type             = "forward"

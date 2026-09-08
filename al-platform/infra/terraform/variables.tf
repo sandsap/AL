@@ -57,3 +57,9 @@ variable "redis_node_type" {
   default     = "cache.t4g.micro"
   description = "ElastiCache Redis node type."
 }
+
+variable "certificate_arn" {
+  type        = string
+  default     = ""
+  description = "ACM certificate ARN. When set, an HTTPS (443) listener is created and port 80 redirects to it (required for Twilio wss://). Empty = HTTP only (local/testing)."
+}

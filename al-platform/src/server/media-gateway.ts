@@ -6,6 +6,7 @@
 //   inbound frames:  connected | start | media(base64 μ-law) | stop
 //   outbound frames: { event:"media", streamSid, media:{ payload: base64 } }
 
+import http from "node:http";
 import { WebSocketServer, type WebSocket } from "ws";
 import type { CallContext, Tenant } from "../core/types.js";
 import { BookingEngine } from "../booking/engine.js";
@@ -53,10 +54,23 @@ interface TwilioFrame {
 }
 
 export function startMediaGateway(port = Number(process.env.MEDIA_PORT ?? 8081)) {
-  const wss = new WebSocketServer({ port });
-  console.log(
-    `[media-gateway] ws://0.0.0.0:${port}  (asr=${makeASR().name} tts=${makeTTS().name} llm=${makeLLM().name})`,
-  );
+  // HTTP server carries the ALB health check (`GET /health`); the WebSocket
+  // server rides on the same port for Twilio Media Stream upgrades.
+  const server = http.createServer((req, res) => {
+    if (req.method === "GET" && req.url === "/health") {
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({ ok: true, service: "media-gateway" }));
+      return;
+    }
+    res.writeHead(426, { "content-type": "text/plain" });
+    res.end("Upgrade Required");
+  });
+  const wss = new WebSocketServer({ server });
+  server.listen(port, "0.0.0.0", () => {
+    console.log(
+      `[media-gateway] http+ws on :${port}  (asr=${makeASR().name} tts=${makeTTS().name} llm=${makeLLM().name})`,
+    );
+  });
 
   wss.on("connection", (ws: WebSocket) => {
     let session: CallSession | undefined;
@@ -107,7 +121,7 @@ export function startMediaGateway(port = Number(process.env.MEDIA_PORT ?? 8081))
     ws.on("close", () => session?.close());
   });
 
-  return wss;
+  return { server, wss };
 }
 
 const isMain = import.meta.url === `file://${process.argv[1]}`;
